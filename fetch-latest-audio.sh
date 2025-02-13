@@ -9,6 +9,7 @@ mkdir -p "$DEST_DIR"
 
 # Find the most recently modified .wav file and copy it
 latest_wav=$(ls -t "$SRC_DIR"/*.wav 2>/dev/null | head -n 1)
+echo "copying: $latest_wav to $DEST_DIR"
 
 if [[ -n "$latest_wav" ]]; then
     cp "$latest_wav" "$DEST_DIR"
