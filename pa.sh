@@ -60,6 +60,8 @@ function sanitize_string() {
 function process_audio() {
 
   original_name="$1"
+  crop_start="$2"
+  crop_end="$3"
   name=$(sanitize_string "$original_name")
 #  name=$original_name
   date=$(date +"%Y%m%d_%H%M%S")
@@ -76,11 +78,17 @@ function process_audio() {
   
   # Find the most recently modified .wav file in the audio directory
   latest_file=$(ls -t "$audio_dir"/*.mp3 "$audio_dir"/*.wav 2>/dev/null | head -n 1)
+
+  s=""
+  # Add cropping if specified
+  if [[ -n "$crop_start" && -n "$crop_end" ]]; then
+      crop=" -ss $crop_start -to $crop_end"
+  fi
   
   # If a .wav file was found, copy it to the new directory and rename it
   if [ -n "$latest_file" ]; then
     # Apply low-pass filter at 3000Hz and high-pass filter at 80Hz
-    ffmpeg -i "$latest_file" -af "highpass=f=80, lowpass=f=3000, loudnorm" "$new_dir/$mname.wav"
+    ffmpeg -i "$latest_file" -af "highpass=f=80, lowpass=f=3000, loudnorm" $crop "$new_dir/$mname.wav"
     #cp "$latest_wav" "$new_dir/$date $name.wav"
     #echo "Applied filters and saved: $new_dir/$mname.wav"
     
@@ -140,29 +148,61 @@ function process_video() {
 }
 #!/bin/bash
 
-# Ensure at least two arguments are provided
-if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 <name> -a|-v"
+
+
+
+
+# Default values
+CROP_START=""
+CROP_END=""
+CROP=""
+MODE=""
+NAME="output"
+
+# Function to display usage
+usage() {
+    echo "Usage: $0 (-a | -v) [-c start,end] [-n name]"
     exit 1
+}
+
+# Parse command-line arguments
+while getopts ":avc:n:" opt; do
+    case $opt in
+        a) MODE="audio" ;;
+        v) MODE="video" ;;
+        c) CROP=$OPTARG
+            if [[ $OPTARG =~ ^[0-9]+\,[0-9]+$ ]]; then
+                CROP_START=$(echo "$OPTARG" | cut -d',' -f1)
+                CROP_END=$(echo "$OPTARG" | cut -d',' -f2)
+            else
+                echo "Invalid crop format. Use start|end (e.g., 5,10)."
+                usage
+            fi
+            ;;
+        n) NAME="$OPTARG" ;;
+        *) usage ;;
+    esac
+done
+
+# Ensure -a or -v is provided
+if [[ -z "$MODE" ]]; then
+    echo "Error: You must specify either -a (audio) or -v (video)."
+    usage
 fi
 
-name="$2"
-
-if [ -z "$2" ]; then
-  name=$(cat audio_name.txt)
-  echo "No name provided, using '$name'"
+if [ -z "$NAME" ]; then
+  NAME=$(cat audio_name.txt)
+  echo "No name provided, using '$NAME'"
 else
-  echo "Name is '$name'"
+  echo "Name is '$NAME'"
 fi
 
-# Assign first argument to name
-filetype="$1"
 video_file="empty"
 
 # Process the flag
-case "$filetype" in
-    "-v") video_file=$(process_video "$name") ;;
-    "-a") video_file=$(process_audio "$name") ;;
+case "$MODE" in
+    "video") video_file=$(process_video "$name") ;;
+    "audio") video_file=$(process_audio "$name" "$CROP_START" "$CROP_END) ;;
     *) echo "Error: Invalid option. Use '-v' for video or '-a' for audio." >&2; exit 1 ;;
 esac
 
