@@ -157,7 +157,7 @@ CROP_START=""
 CROP_END=""
 CROP=""
 MODE=""
-NAME="output"
+NAME=""
 
 # Function to display usage
 usage() {
