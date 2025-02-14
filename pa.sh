@@ -172,8 +172,8 @@ while getopts ":avc:n:" opt; do
         v) MODE="video" ;;
         c) CROP=$OPTARG
             if [[ $OPTARG =~ ^[0-9]+(\.[0-9]*)?\,[0-9]+(\.[0-9]*)?$ ]]; then
-                CROP_START=$(echo "$OPTARG" | cut -d'|' -f1)
-                CROP_END=$(echo "$OPTARG" | cut -d'|' -f2)
+                CROP_START=$(echo "$OPTARG" | cut -d',' -f1)
+                CROP_END=$(echo "$OPTARG" | cut -d',' -f2)
             else
                 echo "Invalid crop format. Use start|end (e.g., 5,10 or 2.5,7.8)."
                 usage
