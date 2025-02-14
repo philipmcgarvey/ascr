@@ -159,7 +159,7 @@ esac
 
 echo "$video_file"
 
-#exit
+exit
 
 
 month=$(date +"%Y%m")
