@@ -20,7 +20,7 @@ strip_to_first_letter() {
 
 
 # Define source and destination directories
-SRC_DIR="/storage/emulated/0/MUSIC/MusicSpeedChanger"
+SRC_DIR="/storage/emulated/0/Music/MusicSpeedChanger"
 DEST_DIR="./audio"
 
 # Ensure the destination directory exists
