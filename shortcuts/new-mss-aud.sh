@@ -23,6 +23,8 @@ strip_to_first_letter() {
 SRC_DIR="/storage/emulated/0/Music/MusicSpeedChanger"
 DEST_DIR="./audio"
 
+cd /storage/3133-3532/ascr
+
 # Ensure the destination directory exists
 mkdir -p "$DEST_DIR"
 
