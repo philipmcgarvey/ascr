@@ -29,7 +29,7 @@ function move_random_image() {
   # Check if there are any images in the unused_images directory
   
   # If there are images in the unused_images dir
-  if ! ls $unused_images/*.jpg &> /dev/null; then
+  if ls $unused_images/*.jpg &> /dev/null; then
     # No images in unused_images, so move all from used_images to unused_images
     mv used_images/* unused_images/
   fi
@@ -159,7 +159,7 @@ esac
 
 echo "$video_file"
 
-exit
+#exit
 
 
 month=$(date +"%Y%m")
