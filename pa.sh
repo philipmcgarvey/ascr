@@ -99,12 +99,13 @@ function process_audio() {
   if [ -n "$moved_image" ]; then
     # Copy the image to the new directory
     cp "$moved_image" "$new_dir/"
-    echo "Copied image: $moved_image to $new_dir"
+    #echo "Copied image: $moved_image to $new_dir"
   else
     echo "No image found to copy"
   fi
 
   ffmpeg -loop 1 -i "$moved_image" -i "$new_dir/$mname.wav" -c:v mpeg4 -tune stillimage -preset fast -crf 18 -c:a aac -b:a 192k -pix_fmt yuv420p -movflags +faststart -shortest "$new_dir/$mname.mp4"
+  echo "$new_dir/$mname.mp4"
 }
 
 function process_video() {
@@ -132,13 +133,11 @@ function process_video() {
     
     # Create an mp3 version of the filtered wav file
     ffmpeg -i "$new_dir/$mname.mp4" -q:a 2 -vn "$new_dir/$mname.mp3"
-   # echo "Processed: $new_dir/$month_$name.wav and $new_dir/$month_$name.mp3"
+    echo "$new_dir/$mname.mp4"
   else
     echo "No .mp4 files found in $audio_dir"
   fi 
 }
-
-
 #!/bin/bash
 
 # Ensure at least two arguments are provided
@@ -149,10 +148,25 @@ fi
 
 # Assign first argument to name
 filetype="$1"
+video_file="empty"
 
 # Process the flag
 case "$filetype" in
-    "-v") process_video "$2" ;;
-    "-a") process_audio "$2" ;;
+    "-v") video_file=$(process_video "$2") ;;
+    "-a") video_file=$(process_audio "$2") ;;
     *) echo "Error: Invalid option. Use '-v' for video or '-a' for audio." >&2; exit 1 ;;
 esac
+
+echo "$video_file"
+
+exit
+
+
+month=$(date +"%Y%m")
+
+am start -a android.intent.action.SEND \
+  -t video/* \
+  -e android.intent.extra.STREAM file://$(pwd)/$video_file \
+  -e android.intent.extra.SUBJECT "$2" \
+  -e android.intent.extra.TEXT "$month" \
+  -n com.google.android.youtube/.UploadActivity
