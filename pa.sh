@@ -166,7 +166,7 @@ month=$(date +"%Y%m")
 
 am start -a android.intent.action.SEND \
   -t video/* \
-  -e android.intent.extra.STREAM file://$(pwd)/$video_file \
+  -e android.intent.extra.STREAM "file://$(pwd)/$video_file" \
   -e android.intent.extra.SUBJECT "$2" \
   -e android.intent.extra.TEXT "$month" \
   -n com.google.android.youtube/.UploadActivity
