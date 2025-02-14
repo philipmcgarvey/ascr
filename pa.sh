@@ -141,9 +141,18 @@ function process_video() {
 #!/bin/bash
 
 # Ensure at least two arguments are provided
-if [[ $# -lt 2 ]]; then
+if [[ $# -lt 1 ]]; then
     echo "Usage: $0 <name> -a|-v"
     exit 1
+fi
+
+name="$2"
+
+if [ -z "$2" ]; then
+  name=$(cat audio_name.txt)
+  echo "No name provided, using '$name'"
+else
+  echo "Name is '$name'"
 fi
 
 # Assign first argument to name
