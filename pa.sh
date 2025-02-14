@@ -161,8 +161,8 @@ video_file="empty"
 
 # Process the flag
 case "$filetype" in
-    "-v") video_file=$(process_video "$2") ;;
-    "-a") video_file=$(process_audio "$2") ;;
+    "-v") video_file=$(process_video "$name") ;;
+    "-a") video_file=$(process_audio "$name") ;;
     *) echo "Error: Invalid option. Use '-v' for video or '-a' for audio." >&2; exit 1 ;;
 esac
 
