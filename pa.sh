@@ -168,6 +168,6 @@ am start -a android.intent.action.SEND \
   -t video/* \
   -e android.intent.extra.STREAM "file://$(pwd)/$video_file" \
   -e android.intent.extra.SUBJECT "$2" \
-  -e android.intent.extra.TEXT "$month" 
+  -e android.intent.extra.TEXT "$month" \
   --activity-package com.google.android.youtube
 #  -n com.google.android.youtube/.UploadActivity
