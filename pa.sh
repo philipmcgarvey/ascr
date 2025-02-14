@@ -80,7 +80,7 @@ function process_audio() {
   # If a .wav file was found, copy it to the new directory and rename it
   if [ -n "$latest_file" ]; then
     # Apply low-pass filter at 3000Hz and high-pass filter at 80Hz
-    ffmpeg -i "$latest_file" -af "highpass=f=80, lowpass=f=3000" "$new_dir/$mname.wav"
+    ffmpeg -i "$latest_file" -af "highpass=f=80, lowpass=f=3000 loudnorm" "$new_dir/$mname.wav"
     #cp "$latest_wav" "$new_dir/$date $name.wav"
     #echo "Applied filters and saved: $new_dir/$mname.wav"
     
