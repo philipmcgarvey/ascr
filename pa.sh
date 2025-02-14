@@ -75,12 +75,12 @@ function process_audio() {
   mkdir -p "$new_dir"
   
   # Find the most recently modified .wav file in the audio directory
-  latest_wav=$(ls -t "$audio_dir"/*.wav | head -n 1)
+  latest_file=$(ls -t "$audio_dir"/*.mp3 "$audio_dir"/*.wav 2>/dev/null | head -n 1)
   
   # If a .wav file was found, copy it to the new directory and rename it
-  if [ -n "$latest_wav" ]; then
+  if [ -n "$latest_file" ]; then
     # Apply low-pass filter at 3000Hz and high-pass filter at 80Hz
-    ffmpeg -i "$latest_wav" -af "highpass=f=80, lowpass=f=3000" "$new_dir/$mname.wav"
+    ffmpeg -i "$latest_file" -af "highpass=f=80, lowpass=f=3000" "$new_dir/$mname.wav"
     #cp "$latest_wav" "$new_dir/$date $name.wav"
     #echo "Applied filters and saved: $new_dir/$mname.wav"
     
@@ -88,7 +88,7 @@ function process_audio() {
     ffmpeg -i "$new_dir/$mname.wav" "$new_dir/$mname.mp3"
    # echo "Processed: $new_dir/$month_$name.wav and $new_dir/$month_$name.mp3"
   else
-    echo "No .wav files found in $audio_dir"
+    echo "No .wav or .mp3 files found in $audio_dir"
   fi 
 
   # Call move_random_image to get the image path
