@@ -201,14 +201,14 @@ video_file="empty"
 
 # Process the flag
 case "$MODE" in
-    "video") video_file=$(process_video "$name") ;;
-    "audio") video_file=$(process_audio "$name" "$CROP_START" "$CROP_END") ;;
+    "video") video_file=$(process_video "$NAME") ;;
+    "audio") video_file=$(process_audio "$NAME" "$CROP_START" "$CROP_END") ;;
     *) echo "Error: Invalid option. Use '-v' for video or '-a' for audio." >&2; exit 1 ;;
 esac
 
 echo "$video_file"
 
-exit
+exit 0
 
 
 month=$(date +"%Y%m")
