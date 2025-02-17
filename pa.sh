@@ -164,7 +164,7 @@ MODE=""
 NAME=""
 
 # Function to display usage
-usage() {
+function usage() {
     echo "Usage: $0 (-a | -v) [-c start,end] [-n name]"
     exit 1
 }
