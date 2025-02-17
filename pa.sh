@@ -141,7 +141,7 @@ function process_video() {
   # If a .wav file was found, copy it to the new directory and rename it
   if [ -n "$latest_vid" ]; then
     # Apply low-pass filter at 3000Hz and high-pass filter at 80Hz
-    ffmpeg -i "$latest_vid" -af "highpass=f=80, lowpass=f=3000" -c:v copy -c:a aac "$new_dir/$mname.mp4"
+    ffmpeg -i "$latest_vid" -af "highpass=f=80, lowpass=f=8000" -c:v copy -c:a aac "$new_dir/$mname.mp4"
     
     # Create an mp3 version of the filtered wav file
     ffmpeg -i "$new_dir/$mname.mp4" -q:a 2 -vn "$new_dir/$mname.mp3"
