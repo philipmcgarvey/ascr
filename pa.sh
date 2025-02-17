@@ -172,16 +172,27 @@ function usage() {
 }
 
 # Parse command-line arguments
+function convert_to_seconds() {
+    local time=$1
+    if [[ $time =~ ^[0-9]+:[0-9]+$ ]]; then
+        local min=${time%:*}
+        local sec=${time#*:}
+        echo $((min * 60 + sec))
+    else
+        echo $time
+    fi
+}
+
 while getopts ":avc:n:" opt; do
     case $opt in
         a) MODE="audio" ;;
         v) MODE="video" ;;
         c) CROP=$OPTARG
-            if [[ $OPTARG =~ ^[0-9]+(\.[0-9]*)?\,[0-9]+(\.[0-9]*)?$ ]]; then
-                CROP_START=$(echo "$OPTARG" | cut -d',' -f1)
-                CROP_END=$(echo "$OPTARG" | cut -d',' -f2)
+            if [[ $OPTARG =~ ^[0-9]+:[0-9]+,[0-9]+:[0-9]+$ || $OPTARG =~ ^[0-9]+,[0-9]+$ || $OPTARG =~ ^[0-9]+:[0-9]+,[0-9]+$ || $OPTARG =~ ^[0-9]+,[0-9]+:[0-9]+$ ]]; then
+                CROP_START=$(convert_to_seconds "$(echo "$OPTARG" | cut -d',' -f1)")
+                CROP_END=$(convert_to_seconds "$(echo "$OPTARG" | cut -d',' -f2)")
             else
-                echo "Invalid crop format. Use start|end (e.g., 5,10 or 2.5,7.8)."
+                echo "Invalid crop format. Use min:sec,min:sec or sec,sec or mixed formats (e.g., 4:10,330 or 250,5:30)."
                 usage
             fi
             ;;
