@@ -2,7 +2,7 @@
 
 # Define source and destination directories
 SRC_DIR="/storage/emulated/0/DCIM/Camera"
-DEST_DIR="./audio"
+DEST_DIR="./video"
 
 # Ensure the destination directory exists
 mkdir -p "$DEST_DIR"
