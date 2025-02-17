@@ -89,8 +89,7 @@ function process_audio() {
   if [ -n "$latest_file" ]; then
     # Apply low-pass filter at 3000Hz and high-pass filter at 80Hz
     ffmpeg -i "$latest_file" -af "highpass=f=80, lowpass=f=8000, loudnorm" $crop "$new_dir/temp.wav"
-    ffmpeg -i "$new_dir/temp.wav" -af loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json -f null - > stats.json && \
-    ffmpeg -i "$new_dir/temp.wav" -af "loudnorm=I=-16:TP=-1.5:LRA=11:$(grep -oP '(?<=input_i": )[^,]+' stats.json | awk '{print "measured_I="$1}'):"$(grep -oP '(?<=input_tp": )[^,]+' stats.json | awk '{print "measured_TP="$1}'):"$(grep -oP '(?<=input_lra": )[^,]+' stats.json | awk '{print "measured_LRA="$1}'):"$(grep -oP '(?<=input_thresh": )[^,]+' stats.json | awk '{print "measured_thresh="$1}')" "$new_dir/$mname.wav"
+    ffmpeg -i "$new_dir/temp.wav" -af "loudnorm=I=-16:TP=-1.5:LRA=11" "$new_dir/$mname.wav"
     rm "$new_dir/temp.wav"
 
     #cp "$latest_wav" "$new_dir/$date $name.wav"
