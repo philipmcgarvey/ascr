@@ -57,6 +57,9 @@ function sanitize_string() {
     echo "$sanitized"
 }
 
+LOWPASS=5000
+HIGHPASS=80
+
 function process_audio() {
 
   original_name="$1"
@@ -88,7 +91,7 @@ function process_audio() {
   # If a .wav file was found, copy it to the new directory and rename it
   if [ -n "$latest_file" ]; then
     # Apply low-pass filter at 3000Hz and high-pass filter at 80Hz
-    ffmpeg -i "$latest_file" -af "highpass=f=80, lowpass=f=8000, loudnorm" $crop "$new_dir/temp.wav"
+    ffmpeg -i "$latest_file" -af "highpass=f=$HIGHPASS, lowpass=f=$LOWPASS, loudnorm" $crop "$new_dir/temp.wav"
     ffmpeg -i "$new_dir/temp.wav" -af "loudnorm=I=-16:TP=-1.5:LRA=11" "$new_dir/$mname.wav"
     rm "$new_dir/temp.wav"
 
@@ -140,7 +143,7 @@ function process_video() {
   # If a .wav file was found, copy it to the new directory and rename it
   if [ -n "$latest_vid" ]; then
     # Apply low-pass filter at 3000Hz and high-pass filter at 80Hz
-    ffmpeg -i "$latest_vid" -af "highpass=f=80, lowpass=f=8000" -c:v copy -c:a aac "$new_dir/$mname.mp4"
+    ffmpeg -i "$latest_vid" -af "highpass=f=$HIGHPASS, lowpass=f=$LOWPASS" -c:v copy -c:a aac "$new_dir/$mname.mp4"
     
     # Create an mp3 version of the filtered wav file
     ffmpeg -i "$new_dir/$mname.mp4" -q:a 2 -vn "$new_dir/$mname.mp3"
