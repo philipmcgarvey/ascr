@@ -5,7 +5,7 @@ function sm() {
   cd $ASCR_DIR
   git pull origin main
   source "$ASCR_DIR/main.sh"
-  echo "sourced main"
+  echo "sourced main 2"
   cd "$original_dir"
 }
 
