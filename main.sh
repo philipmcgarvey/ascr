@@ -1,8 +1,12 @@
 ASCR_DIR="/storage/3133-3532/ascr"
 
 function sm() {
+  original_dir=$(pwd)
+  cd $ASCR_DIR
+  git pull origin main
   source "$ASCR_DIR/main.sh"
   echo "sourced main"
+  cd "$original_dir"
 }
 
 function sort-modify() {
