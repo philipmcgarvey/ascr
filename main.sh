@@ -19,15 +19,19 @@ echo "fil: $latest_file tim: $latest_timestamp"
 
 # Sort files alphabetically and update timestamps
 counter=0
-for file in $(ls -1 | sort); do
-    if [[ -f "'$file'" ]]; then
+while IFS= read -r file; do
+    if [[ -f "$file" ]]; then
         new_time=$((latest_timestamp + counter))
-        echo "$new_time"
-        touch -t "$(date -u -r "$new_time" +%Y%m%d%H%M.%S)" "'$file'"
+        formatted_time=$(date -u -r "@$new_time" +%Y%m%d%H%M.%S 2>/dev/null || busybox date -u -d "@$new_time" +%Y%m%d%H%M.%S 2>/dev/null)
+        
+        if [[ -z "$formatted_time" ]]; then
+            echo "Error: Could not format timestamp."
+            exit 1
+        fi
+        
+        touch -t "$formatted_time" "$file"
         ((counter++))
-    else
-       echo "didnt find $file"
     fi
-done
+done < <(ls -1 | sort)
 
 }
