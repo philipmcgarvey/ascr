@@ -59,3 +59,24 @@ for file in *.mp3 *.wav *.flac *.m4a; do
   fi
 done
 }
+
+function tc(){
+#!/bin/bash
+
+# Remove all files that don't have "_updated" in the name
+for file in *; do
+  if [[ -f "$file" && ! "$file" =~ _updated ]]; then
+    rm "$file"
+    echo "Removed $file"
+  fi
+done
+
+# Rename files by removing "_updated" from the names of the remaining files
+for file in *_updated*; do
+  if [[ -f "$file" ]]; then
+    new_name="${file/_updated/}"
+    mv "$file" "$new_name"
+    echo "Renamed $file to $new_name"
+  fi
+done
+}
