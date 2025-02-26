@@ -37,12 +37,25 @@ find . -maxdepth 1 -type f ! -name ".*" -print0 | sort -z | while IFS= read -r -
         
         touch -t "$formatted_time" "$file"
         ((counter++))
-        
-        # If the file is an audio file, update its metadata
-        if [[ "$file" =~ \.(mp3|m4a|flac|wav)$ ]]; then
-            metadata_date=$(date -u -d "@$new_time" "+%Y-%m-%d" 2>/dev/null || busybox date -u -d "@$new_time" "+%Y-%m-%d" 2>/dev/null)
-            ffmpeg -i "$file" -metadata date="$metadata_date" -codec copy "temp_$file" && mv "temp_$file" "$file"
-        fi
     fi
+done
+}
+
+function amdtpd() {
+#!/bin/bash
+
+# Iterate through all audio files in the current directory
+for file in *.mp3 *.wav *.flac *.m4a; do
+  # Check if file exists (in case there are no audio files)
+  if [[ -f "$file" ]]; then
+    # Get the file's last modified date
+    mod_date=$(stat -c %y "$file" | cut -d' ' -f1)
+    
+    # Use ffmpeg to set the publication date metadata
+    # Wrap filenames in double quotes to handle spaces and special characters
+    ffmpeg -i "$file" -metadata date="$mod_date" -codec copy "${file%.*}_updated.${file##*.}"
+    
+    echo "Updated publication date for '$file' to $mod_date"
+  fi
 done
 }
