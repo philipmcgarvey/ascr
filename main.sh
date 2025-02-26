@@ -28,15 +28,21 @@ counter=0
 find . -maxdepth 1 -type f -print0 | sort -z | while IFS= read -r -d '' file; do
     if [[ -f "$file" ]]; then
         new_time=$((latest_timestamp + counter))
-        formatted_time=$(date -u -d "@$new_time" +%Y%m%d%H%M.%S)
+        formatted_time=$(date -u -d "@$new_time" +%Y%m%d%H%M.%S 2>/dev/null || busybox date -u -d "@$new_time" +%Y%m%d%H%M.%S 2>/dev/null)
         
         if [[ -z "$formatted_time" ]]; then
-            echo "Error: Could not format timestamp. $formatted_time"
+            echo "Error: Could not format timestamp."
             exit 1
         fi
         
         touch -t "$formatted_time" "$file"
         ((counter++))
+        
+        # If the file is an audio file, update its metadata
+        if [[ "$file" =~ \.(mp3|m4a|flac|wav)$ ]]; then
+            metadata_date=$(date -u -d "@$new_time" "+%Y-%m-%d" 2>/dev/null || busybox date -u -d "@$new_time" "+%Y-%m-%d" 2>/dev/null)
+            ffmpeg -i "$file" -metadata date="$metadata_date" -codec copy "temp_$file" && mv "temp_$file" "$file"
+        fi
     fi
 done
 }
