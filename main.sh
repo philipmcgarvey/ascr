@@ -38,4 +38,5 @@ find . -maxdepth 1 -type f -print0 | sort -z | while IFS= read -r -d '' file; do
         touch -t "$formatted_time" "$file"
         ((counter++))
     fi
-done}
+done
+}
