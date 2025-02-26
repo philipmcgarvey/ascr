@@ -31,7 +31,7 @@ find . -maxdepth 1 -type f -print0 | sort -z | while IFS= read -r -d '' file; do
         formatted_time=$(date -u -r "@$new_time" +%Y%m%d%H%M.%S 2>/dev/null || busybox date -u -d "@$new_time" +%Y%m%d%H%M.%S 2>/dev/null)
         
         if [[ -z "$formatted_time" ]]; then
-            echo "Error: Could not format timestamp."
+            echo "Error: Could not format timestamp. $formatted_time"
             exit 1
         fi
         
