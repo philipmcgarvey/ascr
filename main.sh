@@ -28,7 +28,7 @@ counter=0
 find . -maxdepth 1 -type f -print0 | sort -z | while IFS= read -r -d '' file; do
     if [[ -f "$file" ]]; then
         new_time=$((latest_timestamp + counter))
-        formatted_time=$(date -u -r "@$new_time" +%Y%m%d%H%M.%S)
+        formatted_time=$(date -u -d "@$new_time" +%Y%m%d%H%M.%S)
         
         if [[ -z "$formatted_time" ]]; then
             echo "Error: Could not format timestamp. $formatted_time"
