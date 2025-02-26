@@ -25,6 +25,8 @@ for file in $(ls -1 | sort); do
         echo "$new_time"
         touch -t "$(date -u -r "$new_time" +%Y%m%d%H%M.%S)" "$file"
         ((counter++))
+    else
+       echo "didnt find $file"
     fi
 done
 
