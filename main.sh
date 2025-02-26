@@ -25,7 +25,7 @@ fi
 
 # Sort files alphabetically and update timestamps
 counter=0
-find . -maxdepth 1 -type f -print0 | sort -z | while IFS= read -r -d '' file; do
+find . -maxdepth 1 -type f ! -name ".*" -print0 | sort -z | while IFS= read -r -d '' file; do
     if [[ -f "$file" ]]; then
         new_time=$((latest_timestamp + counter))
         formatted_time=$(date -u -d "@$new_time" +%Y%m%d%H%M.%S 2>/dev/null || busybox date -u -d "@$new_time" +%Y%m%d%H%M.%S 2>/dev/null)
