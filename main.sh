@@ -15,6 +15,7 @@ function sort-modify() {
 # Get the most recent modification time in the directory (in seconds since epoch)
 latest_file=$(ls -t | head -n 1)
 latest_timestamp=$(stat -c "%Y" "$latest_file")
+echo "fil: $latest_file tim: $latest_timestamp"
 
 # Sort files alphabetically and update timestamps
 counter=0
