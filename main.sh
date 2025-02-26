@@ -20,10 +20,10 @@ echo "fil: $latest_file tim: $latest_timestamp"
 # Sort files alphabetically and update timestamps
 counter=0
 for file in $(ls -1 | sort); do
-    if [[ -f "$file" ]]; then
+    if [[ -f "'$file'" ]]; then
         new_time=$((latest_timestamp + counter))
         echo "$new_time"
-        touch -t "$(date -u -r "$new_time" +%Y%m%d%H%M.%S)" "$file"
+        touch -t "$(date -u -r "$new_time" +%Y%m%d%H%M.%S)" "'$file'"
         ((counter++))
     else
        echo "didnt find $file"
