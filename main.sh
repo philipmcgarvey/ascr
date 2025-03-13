@@ -1,4 +1,4 @@
-ASCR_DIR="/storage/3133-3532/ascr"
+ASCR_DIR="/storage/3364-3533/ascr"
 
 function sm() {
   original_dir=$(pwd)
@@ -7,6 +7,10 @@ function sm() {
   source "$ASCR_DIR/main.sh"
   echo "sourced main 2"
   cd "$original_dir"
+}
+
+function ascr-dir() {
+  echo "$ASCR_DIR"
 }
 
 function sort-modify() {

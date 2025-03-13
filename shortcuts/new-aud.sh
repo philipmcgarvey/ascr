@@ -1,4 +1,5 @@
-cd /storage/3133-3532/ascr
+
+cd $(ascr-dir)
 bash fetch-latest-audio.sh
 
 #bash pa.sh -a "$name"
