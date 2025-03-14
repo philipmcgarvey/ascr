@@ -12,6 +12,7 @@ function sm() {
 function ascr-dir() {
   echo "$ASCR_DIR"
 }
+export -f ascr-dir
 
 function sort-modify() {
   # updates all files last modified dates in current directory so that a last-modified sort gives same results as alphabetical sort
