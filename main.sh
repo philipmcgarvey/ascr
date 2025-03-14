@@ -1,5 +1,5 @@
-SD_CARD="/storage/3364-3533"
-ASCR_DIR="$SD_CARD/ascr"
+export ASCR_STORAGE="/storage/3364-3533"
+export ASCR_DIR="$ASCR_STORAGE/ascr"
 
 function sm() {
   original_dir=$(pwd)
@@ -14,10 +14,6 @@ function ascr-dir() {
   echo "$ASCR_DIR"
 }
 export -f ascr-dir
-function music-dir() {
-  echo "$SD_CARD/Music"
-}
-export -f music-dir
 
 function new-aud() {
   bash fetch-latest-audio.sh

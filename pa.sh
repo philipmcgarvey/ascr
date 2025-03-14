@@ -1,3 +1,5 @@
+PHILIP_DIR="$ASCR_STORAGE/Music/Fiddle/Philip McGarvey"
+
 function get_latest_file() {
   folder=$1  # First argument is the directory path
 
@@ -100,7 +102,7 @@ function process_audio() {
     
     # Create an mp3 version of the filtered wav file
     ffmpeg -i "$new_dir/$mname.wav" -metadata artist="Philip McGarvey" "$new_dir/$mname.mp3"
-    cp "$new_dir/$mname.mp3" "$(music-dir)/Fiddle/Philip McGarvey/$mname.mp3"
+    cp "$new_dir/$mname.mp3" "$PHILIP_DIR/$mname.mp3"
    # echo "Processed: $new_dir/$month_$name.wav and $new_dir/$month_$name.mp3"
   else
     echo "No .wav or .mp3 files found in $audio_dir"
@@ -148,7 +150,7 @@ function process_video() {
     
     # Create an mp3 version of the filtered wav file
     ffmpeg -i "$new_dir/$mname.mp4" -metadata artist="Philip McGarvey" -q:a 2 -vn "$new_dir/$mname.mp3"
-    cp "$new_dir/$mname.mp3" "$(music-dir)/Fiddle/Philip McGarvey/$mname.mp3"
+    cp "$new_dir/$mname.mp3" "$PHILIP_DIR/$mname.mp3"
     echo "$new_dir/$mname.mp4"
   else
     echo "No .mp4 files found in $audio_dir"
