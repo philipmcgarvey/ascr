@@ -99,7 +99,8 @@ function process_audio() {
     #echo "Applied filters and saved: $new_dir/$mname.wav"
     
     # Create an mp3 version of the filtered wav file
-    ffmpeg -i "$new_dir/$mname.wav" "$new_dir/$mname.mp3"
+    ffmpeg -i "$new_dir/$mname.wav" -metadata artist="Philip McGarvey" "$new_dir/$mname.mp3"
+    cp "$new_dir/$mname.mp3" "$(music-dir)/fiddle/Philip McGarvey/$mname.mp3"
    # echo "Processed: $new_dir/$month_$name.wav and $new_dir/$month_$name.mp3"
   else
     echo "No .wav or .mp3 files found in $audio_dir"
@@ -146,7 +147,8 @@ function process_video() {
     ffmpeg -i "$latest_vid" -af "highpass=f=$HIGHPASS, lowpass=f=$LOWPASS" -c:v copy -c:a aac "$new_dir/$mname.mp4"
     
     # Create an mp3 version of the filtered wav file
-    ffmpeg -i "$new_dir/$mname.mp4" -q:a 2 -vn "$new_dir/$mname.mp3"
+    ffmpeg -i "$new_dir/$mname.mp4" -metadata artist="Philip McGarvey" -q:a 2 -vn "$new_dir/$mname.mp3"
+    cp "$new_dir/$mname.mp3" "$(music-dir)/fiddle/Philip McGarvey/$mname.mp3"
     echo "$new_dir/$mname.mp4"
   else
     echo "No .mp4 files found in $audio_dir"
