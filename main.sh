@@ -14,6 +14,13 @@ function ascr-dir() {
 }
 export -f ascr-dir
 
+function new-aud() {
+  bash fetch-latest-audio.sh
+}
+function new-vid() {
+  bash fetch-latest-video.sh
+}
+
 function sort-modify() {
   # updates all files last modified dates in current directory so that a last-modified sort gives same results as alphabetical sort
 
