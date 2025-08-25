@@ -311,3 +311,60 @@ for dir in */; do
     cd ..
 done
 }
+
+
+function sanitize-dir-structure() {
+#!/bin/bash
+
+# Check for dependencies
+if ! command -v rename &>/dev/null; then
+    echo "Warning: 'rename' command not found. Falling back to 'mv' for renaming."
+fi
+
+# Function to sanitize file and folder names
+sanitize_name() {
+    local name="$1"
+    local new_name
+
+    # Ensure ∕ (U+2215, Division Slash) is converted to ⧸ (U+29F8, Big Solidus)
+    new_name=$(echo "$name" | sed 's/∕/⧸/g')
+
+    new_name=$(echo "$new_name" | sed "s/[’']/PLACEHOLDERAPOSTROPHE/g")
+
+    # Temporarily replace ⧸ with a placeholder before iconv processes the name
+    new_name=$(echo "$new_name" | sed 's/⧸/PLACEHOLDERBIGSOLIDUS/g')
+
+    # Use iconv to transliterate characters (excluding our placeholder)
+    new_name=$(echo "$new_name" | iconv -f UTF-8 -t ASCII//TRANSLIT)
+
+    # Replace specific problematic symbols
+    new_name=$(echo "$new_name" | sed -E 's/[:]/-/g')
+
+    # Restore ⧸ from the placeholder after iconv
+    new_name=$(echo "$new_name" | sed 's/PLACEHOLDERBIGSOLIDUS/⧸/g')
+
+    # Remove any remaining unwanted characters except spaces, dots, underscores, hyphens, and ⧸
+    new_name=$(echo "$new_name" | sed -E 's/[^A-Za-z0-9& ._⧸-]//g')
+
+    new_name=$(echo "$new_name" | sed "s/PLACEHOLDERAPOSTROPHE/'/g")
+
+    # Remove trailing dots or spaces
+    new_name=$(echo "$new_name" | sed -E 's/[._-]+$//')
+
+    echo "$new_name"
+}
+
+# Rename files and directories recursively
+find . -depth -name "*" | while read -r file; do
+    dir=$(dirname "$file")
+    base=$(basename "$file")
+    sanitized=$(sanitize_name "$base")
+
+    if [[ "$base" != "$sanitized" ]]; then
+        mv "$file" "$dir/$sanitized"
+        echo "Renamed: $file -> $dir/$sanitized"
+    fi
+done
+
+echo "Renaming process completed!"
+}
