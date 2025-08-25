@@ -101,8 +101,8 @@ function process_audio() {
     #echo "Applied filters and saved: $new_dir/$mname.wav"
     
     # Create an mp3 version of the filtered wav file
-    ffmpeg -i "$new_dir/$mname.wav" -metadata artist="Philip McGarvey" "$new_dir/$mname.mp3"
-    cp "$new_dir/$mname.mp3" "$PHILIP_DIR/$mname.mp3"
+    ffmpeg -i "$new_dir/$mname.wav" -metadata artist="Philip McGarvey" -metadata title="$original_name"  -c:a aac -b:a 192k -vn "$new_dir/$mname.m4a"
+    cp "$new_dir/$mname.m4a" "$PHILIP_DIR/$mname.m4a"
    # echo "Processed: $new_dir/$month_$name.wav and $new_dir/$month_$name.mp3"
   else
     echo "No .wav or .mp3 files found in $audio_dir"
@@ -146,11 +146,11 @@ function process_video() {
   # If a .wav file was found, copy it to the new directory and rename it
   if [ -n "$latest_vid" ]; then
     # Apply low-pass filter at 3000Hz and high-pass filter at 80Hz
-    ffmpeg -i "$latest_vid" -af "highpass=f=$HIGHPASS, lowpass=f=$LOWPASS" -c:v copy -c:a aac "$new_dir/$mname.mp4"
+    ffmpeg -i "$latest_vid" -af "highpass=f=$HIGHPASS, lowpass=f=$LOWPASS, aresample=async=1" -c:v copy -c:a aac "$new_dir/$mname.mp4"
     
     # Create an mp3 version of the filtered wav file
-    ffmpeg -i "$new_dir/$mname.mp4" -metadata artist="Philip McGarvey" -q:a 2 -vn "$new_dir/$mname.mp3"
-    cp "$new_dir/$mname.mp3" "$PHILIP_DIR/$mname.mp3"
+    ffmpeg -i "$new_dir/$mname.mp4" -metadata artist="Philip McGarvey" -metadata title="$original_name"  -c:a aac -b:a 192k -vn "$new_dir/$mname.m4a"
+    cp "$new_dir/$mname.m4a" "$PHILIP_DIR/$mname.m4a"
     echo "$new_dir/$mname.mp4"
   else
     echo "No .mp4 files found in $audio_dir"
