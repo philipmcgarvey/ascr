@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define source and destination directories
-SRC_DIR="/storage/emulated/0/DCIM/Camera"
+SRC_DIR="../DCIM/Camera"
 DEST_DIR="./video"
 
 # Ensure the destination directory exists
