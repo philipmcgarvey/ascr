@@ -29,7 +29,7 @@ function yt-single() {
 
 # usage yt-pl "https://www.youtube.com/watch?v=UX3Fq7QZmaw&list=OLAK5uy_kqwySEJBXUgxIFopOHwUFOm-YMIl3TEvg&index=2" "Oisin - On the fiddle"
 function yt-pl() {
-yt-dlp -f bestaudio[ext=m4a] --write-thumbnail --add-metadata \
+yt-dlp -f bestaudio --extract-audio --audio-format m4a --write-thumbnail --add-metadata \
   --output "$2/%(title)s.%(ext)s" --metadata-from-title "%(title)s" "$1"
 }
 
